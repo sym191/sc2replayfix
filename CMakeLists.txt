@@ -17,3 +17,9 @@ add_executable(sc2fix
         src/Sc2Version.cpp
         src/Sc2Version.h
 )
+
+configure_file(
+        ${CMAKE_SOURCE_DIR}/config/config.conf
+        ${CMAKE_BINARY_DIR}/config.conf
+        COPYONLY
+)
