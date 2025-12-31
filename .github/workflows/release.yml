@@ -1,0 +1,36 @@
+name: release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build-and-release:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        run: cmake --build build --config Release
+
+      - name: Prepare release files
+        run: |
+          mkdir dist
+          copy build\Release\*.exe dist\
+          copy config\config.conf dist\config.conf
+
+      - name: Create zip
+        run: |
+          powershell Compress-Archive -Path dist\* -DestinationPath sc2-replay-fix-${{ github.ref_name }}-win64.zip
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: sc2-replay-fix-${{ github.ref_name }}-win64.zip
+
