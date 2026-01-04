@@ -33,13 +33,19 @@ inline void append_to_file(const std::filesystem::path& path,
     ofs.write(text.data(), text.size());
 }
 
-inline void log(std::string_view msg)
+inline void log(const std::string_view msg)
 {
     static const auto log_file =
         std::filesystem::current_path() / "patch.log";
     std::cout << msg << std::endl;
     append_to_file(log_file,
         now_string() + " " + std::string(msg) + "\n");
+}
+
+template <typename... Args>
+inline void log(std::format_string<Args...> fmt, Args&&... args)
+{
+    log(std::format(fmt, std::forward<Args>(args)...));
 }
 
 

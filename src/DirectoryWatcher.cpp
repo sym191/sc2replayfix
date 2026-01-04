@@ -7,6 +7,7 @@
 #include <fstream>
 #include <thread>
 
+#include "Config.h"
 #include "Logger.h"
 
 DirectoryWatcher::DirectoryWatcher(std::filesystem::path path): path_(std::move(path))
@@ -23,7 +24,7 @@ bool wait_until_file_ready(const std::filesystem::path& p) {
     //     Sleep(200);
     // }
     // return false;
-    std::this_thread::sleep_for(std::chrono::seconds(3));
+    std::this_thread::sleep_for(std::chrono::seconds(Config::get_int("wait_time", 3)));
     return true;
 }
 

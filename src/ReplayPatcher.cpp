@@ -14,19 +14,19 @@ ReplayPatcher::ReplayPatcher(const Sc2Version target): target_(target)
 {
 }
 
-void ReplayPatcher::patch(const std::filesystem::path& replay, const int flag) const
+bool ReplayPatcher::patch(const std::filesystem::path& replay) const
 {
     auto file = ReplayFile(replay);
     if (!file.open())
     {
-        if (flag) log("open failed");
-        return;
+        log("open failed");
+        return false;
     }
 
     if(!file.backup())
     {
-        if (flag) log("backup failed");
-        return;
+        log("backup failed");
+        return false;
     }
 
     std::vector<uint8_t> pac = {
@@ -38,13 +38,15 @@ void ReplayPatcher::patch(const std::filesystem::path& replay, const int flag) c
         to_vint(target_.patch)
     };
 
-    if (flag) log("start fix" + replay.string());
-
     if(!file.write_bytes(VERSION_OFFSET, pac))
     {
-        if (flag) log("write failed");
-        return;
+        log("write failed");
+        return false;
     }
+
+    log("fix succuss" + replay.string());
+
+    return true;
 }
 
 uint8_t ReplayPatcher::to_vint(const int v)

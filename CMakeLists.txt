@@ -16,5 +16,6 @@ add_executable(sc2fix
         src/ReplayPatcher.h
         src/Sc2Version.cpp
         src/Sc2Version.h
+        src/Timer.h
 )
 

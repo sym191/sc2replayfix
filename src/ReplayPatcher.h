@@ -10,7 +10,7 @@
 class ReplayPatcher {
 public:
     explicit ReplayPatcher(Sc2Version target);
-    void patch(const std::filesystem::path& replay, const int flag = 1) const;
+    [[nodiscard]] bool patch(const std::filesystem::path& replay) const;
 
 private:
     static uint8_t to_vint(int);
